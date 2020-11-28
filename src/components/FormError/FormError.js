@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React from "react";
 
-class FormError extends Component {
-  render() {
-    return <div>FormError</div>;
-  }
-}
+import Alert from "react-bootstrap/Alert";
+
+const FormError = () => {
+  return (
+    <Alert variant="danger" onClose={() => console.log("CLOSE")}>
+      There was an issue with login
+    </Alert>
+  );
+};
 
 export default FormError;

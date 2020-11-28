@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
+import FormError from "../FormError";
+
 import axios from "axios";
 
 const Login = () => {
@@ -30,15 +32,17 @@ const Login = () => {
         .post("http://127.0.0.1:3000/users/sign_in", user)
         .then((response) => {
           console.log(response);
+          setFormError(false);
         })
         .catch((error) => {
-          console.log(error);
+          setFormError(true);
         });
     }
   };
 
   return (
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      {formError && <FormError />}
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control
@@ -76,6 +80,7 @@ const Login = () => {
           Insert the code received in your email this week.
         </Form.Text>
       </Form.Group>
+
       <Button variant="call-to-action" type="submit">
         Go!
       </Button>
