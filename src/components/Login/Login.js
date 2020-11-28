@@ -1,12 +1,16 @@
 import React, { useState, useRef } from "react";
+import { connect } from "react-redux";
+import { startLogin } from "../../redux/actions";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
 import FormError from "../FormError";
 
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ isLoginIn, startLogin }) => {
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
   const [email, setEmail] = useState("");
@@ -22,6 +26,8 @@ const Login = () => {
     setValidated(true);
 
     if (form.checkValidity()) {
+      startLogin();
+
       const user = {
         user: {
           email: email,
@@ -71,10 +77,31 @@ const Login = () => {
         </Form.Control.Feedback>
       </Form.Group>
       <Button variant="call-to-action" type="submit">
-        Go!
+        {isLoginIn ? (
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        ) : (
+          <span>Go!</span>
+        )}
       </Button>
     </Form>
   );
 };
 
-export default Login;
+function mapStateToProps(state) {
+  const { login } = state;
+  return { isLoginIn: login.isLoginIn };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    startLogin: () => dispatch(startLogin()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
