@@ -1,14 +1,18 @@
-import "./App.css";
 import Login from "./components/Login";
 import Logo from "./components/Logo";
+import Container from "react-bootstrap/Container";
+
+import "./App.scss";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">Time Tracker</header>
-      <Logo />
-      <Login />
-    </div>
+    <>
+      <header className="App_header">Time Tracker</header>
+      <Container className="App">
+        <Logo />
+        <Login />
+      </Container>
+    </>
   );
 }
 
