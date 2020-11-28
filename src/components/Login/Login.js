@@ -70,17 +70,6 @@ const Login = () => {
           Please enter your password.
         </Form.Control.Feedback>
       </Form.Group>
-      <Form.Group controlId="formBasicRaceCode">
-        <Form.Label>Race code</Form.Label>
-        <Form.Control type="text" placeholder="Race code" required />
-        <Form.Control.Feedback type="invalid">
-          Please enter the code received this week in an email.
-        </Form.Control.Feedback>
-        <Form.Text className="text-muted">
-          Insert the code received in your email this week.
-        </Form.Text>
-      </Form.Group>
-
       <Button variant="call-to-action" type="submit">
         Go!
       </Button>
