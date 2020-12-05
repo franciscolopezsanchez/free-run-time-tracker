@@ -1,7 +1,8 @@
-import { START_LOGIN } from "../actionTypes";
+import { LOGIN_ERROR, LOGIN_SUCCESS, START_LOGIN } from "../actionTypes";
 
 const initialState = {
   isLoginIn: false,
+  loginError: null,
 };
 
 const login = (state = initialState, action) => {
@@ -10,6 +11,22 @@ const login = (state = initialState, action) => {
       return {
         ...state,
         isLoginIn: true,
+      };
+    }
+
+    case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        isLoginIn: false,
+        loginError: null,
+      };
+    }
+
+    case LOGIN_ERROR: {
+      return {
+        ...state,
+        isLoginIn: false,
+        loginError: action.payload,
       };
     }
     default:

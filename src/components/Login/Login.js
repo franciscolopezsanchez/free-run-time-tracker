@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
-import { startLogin } from "../../redux/actions";
+import { useHistory } from "react-router";
+
+import { login } from "../../redux/actions";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -8,15 +10,11 @@ import Spinner from "react-bootstrap/Spinner";
 
 import FormError from "../FormError";
 
-import axios from "axios";
-
-const Login = ({ isLoginIn, startLogin }) => {
+const Login = ({ isLoginIn, loginError, login }) => {
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [validated, setValidated] = useState(false);
-  const [formError, setFormError] = useState(false);
+  let history = useHistory();
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -26,29 +24,13 @@ const Login = ({ isLoginIn, startLogin }) => {
     setValidated(true);
 
     if (form.checkValidity()) {
-      startLogin();
-
-      const user = {
-        user: {
-          email: email,
-          password: password,
-        },
-      };
-      axios
-        .post("http://127.0.0.1:3000/users/sign_in", user)
-        .then((response) => {
-          console.log(response);
-          setFormError(false);
-        })
-        .catch((error) => {
-          setFormError(true);
-        });
+      login(emailInput.current.value, passwordInput.current.value, history);
     }
   };
 
   return (
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      {formError && <FormError />}
+      {loginError && <FormError error={loginError} />}
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control
@@ -56,7 +38,6 @@ const Login = ({ isLoginIn, startLogin }) => {
           type="email"
           placeholder="Enter email"
           ref={emailInput}
-          onChange={() => setEmail(emailInput.current.value)}
         />
         <Form.Control.Feedback type="invalid">
           Please enter your email.
@@ -70,7 +51,6 @@ const Login = ({ isLoginIn, startLogin }) => {
           placeholder="Password"
           autoComplete="an-awesome-password"
           ref={passwordInput}
-          onChange={() => setPassword(passwordInput.current.value)}
         />
         <Form.Control.Feedback type="invalid">
           Please enter your password.
@@ -93,15 +73,15 @@ const Login = ({ isLoginIn, startLogin }) => {
   );
 };
 
-function mapStateToProps(state) {
-  const { login } = state;
-  return { isLoginIn: login.isLoginIn };
+function mapStateToProps({ login }) {
+  return {
+    isLoginIn: login.isLoginIn,
+    loginError: login.loginError,
+  };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    startLogin: () => dispatch(startLogin()),
-  };
+const mapDispatchToProps = {
+  login,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
